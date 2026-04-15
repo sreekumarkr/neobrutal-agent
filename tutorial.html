@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Build Your First AI Agent — AI Academy</title>
+<meta name="description" content="A step-by-step tutorial: build a real AI agent in Python using the Anthropic SDK. Tools, loops, and everything that makes an agent an agent." />
+<meta property="og:title" content="Build Your First AI Agent — AI Academy" />
+<meta property="og:description" content="A step-by-step tutorial: build a real AI agent in Python using the Anthropic SDK." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link">Foundations</a></li>
+        <li><a href="llms.html" class="link">LLMs</a></li>
+        <li><a href="agents.html" class="link">Agents</a></li>
+        <li><a href="tutorial.html" class="link active">Tutorial</a></li>
+        <li><a href="frameworks.html" class="link">Frameworks</a></li>
+        <li><a href="glossary.html" class="link">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero green">
+      <h1>Build Your<br/>First <span class="pop">Agent</span></h1>
+      <p class="lede">Enough theory. In the next 20 minutes you'll build a real AI agent in Python — one that reasons, calls tools, and loops until it's done. No framework, just ~70 lines of code.</p>
+      <div class="doodle" style="top:30px;right:40px;">▶</div>
+    </header>
+
+    <section class="reveal">
+      <h2 class="section-title">What You'll Build</h2>
+      <p class="section-sub">A tiny "math + weather" agent. It picks the right tool for your question, calls it, reads the result, and answers.</p>
+      <div class="info-box">
+        <h3>Example</h3>
+        <p><strong>You:</strong> "What's 48 times 17, and is it raining in Tokyo?"</p>
+        <p><strong>Agent thinks:</strong> "I need to call <code>calculator</code>, then <code>get_weather</code>, then answer."</p>
+        <p><strong>Agent replies:</strong> "48 × 17 = 816. Tokyo is currently 14°C with light rain."</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Step 0 — Prereqs</h2>
+      <div class="grid cols-3">
+        <div class="card blue"><div class="icon">🐍</div><h3>Python 3.10+</h3><p>Any recent version works. <code>python3 --version</code></p></div>
+        <div class="card yellow"><div class="icon">🔑</div><h3>API Key</h3><p>Grab one from <strong>console.anthropic.com</strong>. Free credits to start.</p></div>
+        <div class="card pink"><div class="icon">☕</div><h3>20 minutes</h3><p>That's honestly all this takes.</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Step 1 — Install the SDK</h2>
+      <pre class="code"><span class="c"># Create a fresh directory</span>
+mkdir my-first-agent && <span class="k">cd</span> my-first-agent
+
+<span class="c"># Install the Anthropic Python SDK</span>
+pip install anthropic
+
+<span class="c"># Set your API key (for this shell session)</span>
+<span class="k">export</span> ANTHROPIC_API_KEY=<span class="s">"sk-ant-..."</span></pre>
+      <p style="margin-top:12px;font-size:14px;">That's the entire setup. No framework to learn first, no YAML to edit.</p>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Step 2 — Your First LLM Call</h2>
+      <p class="section-sub">Before we add tools, let's make sure we can talk to Claude. Create <code>agent.py</code>:</p>
+      <pre class="code"><span class="k">from</span> anthropic <span class="k">import</span> Anthropic
+
+client = Anthropic()
+
+response = client.messages.create(
+    model=<span class="s">"claude-sonnet-4-6"</span>,
+    max_tokens=<span class="s">1024</span>,
+    messages=[
+        {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"Say hi in one word."</span>}
+    ],
+)
+
+<span class="k">print</span>(response.content[<span class="s">0</span>].text)</pre>
+      <p style="margin-top:12px;font-size:14px;">Run <code>python agent.py</code>. You should see Claude say hi. If that works, you have an LLM. Now let's upgrade it into an agent.</p>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Step 3 — Define Your Tools</h2>
+      <p class="section-sub">A tool is just a function + a schema describing it. We'll give the agent two tools: a calculator and a (fake) weather lookup.</p>
+      <pre class="code"><span class="c"># --- the actual tool functions ---</span>
+
+<span class="k">def</span> <span class="f">calculator</span>(expression: <span class="k">str</span>) -> <span class="k">str</span>:
+    <span class="k">try</span>:
+        <span class="k">return</span> <span class="k">str</span>(<span class="f">eval</span>(expression, {<span class="s">"__builtins__"</span>: {}}, {}))
+    <span class="k">except</span> Exception <span class="k">as</span> e:
+        <span class="k">return</span> <span class="s">f"error: {e}"</span>
+
+<span class="k">def</span> <span class="f">get_weather</span>(city: <span class="k">str</span>) -> <span class="k">str</span>:
+    <span class="c"># A real agent would call a weather API here.</span>
+    fake = {<span class="s">"tokyo"</span>: <span class="s">"14°C, light rain"</span>, <span class="s">"paris"</span>: <span class="s">"18°C, sunny"</span>}
+    <span class="k">return</span> fake.get(city.lower(), <span class="s">"unknown city"</span>)
+
+<span class="c"># --- the tool schemas Claude sees ---</span>
+
+tools = [
+    {
+        <span class="s">"name"</span>: <span class="s">"calculator"</span>,
+        <span class="s">"description"</span>: <span class="s">"Evaluate a math expression and return the result."</span>,
+        <span class="s">"input_schema"</span>: {
+            <span class="s">"type"</span>: <span class="s">"object"</span>,
+            <span class="s">"properties"</span>: {<span class="s">"expression"</span>: {<span class="s">"type"</span>: <span class="s">"string"</span>}},
+            <span class="s">"required"</span>: [<span class="s">"expression"</span>],
+        },
+    },
+    {
+        <span class="s">"name"</span>: <span class="s">"get_weather"</span>,
+        <span class="s">"description"</span>: <span class="s">"Get the current weather for a city."</span>,
+        <span class="s">"input_schema"</span>: {
+            <span class="s">"type"</span>: <span class="s">"object"</span>,
+            <span class="s">"properties"</span>: {<span class="s">"city"</span>: {<span class="s">"type"</span>: <span class="s">"string"</span>}},
+            <span class="s">"required"</span>: [<span class="s">"city"</span>],
+        },
+    },
+]
+
+TOOLS_BY_NAME = {<span class="s">"calculator"</span>: calculator, <span class="s">"get_weather"</span>: get_weather}</pre>
+      <div class="info-box">
+        <h3>Key idea</h3>
+        <p>The model can't actually run your code. It only sees the <strong>schema</strong> and decides when to call a tool. You run the function and send the result back. That back-and-forth is the agent loop.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Step 4 — The Agent Loop</h2>
+      <p class="section-sub">This is the whole magic. Call the model. If it asks for a tool, run it, append the result, call the model again. Stop when it has a final answer.</p>
+      <pre class="code"><span class="k">def</span> <span class="f">run_agent</span>(user_message: <span class="k">str</span>, max_steps: <span class="k">int</span> = <span class="s">10</span>):
+    messages = [{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: user_message}]
+
+    <span class="k">for</span> step <span class="k">in</span> <span class="f">range</span>(max_steps):
+        response = client.messages.create(
+            model=<span class="s">"claude-sonnet-4-6"</span>,
+            max_tokens=<span class="s">1024</span>,
+            tools=tools,
+            messages=messages,
+        )
+
+        <span class="c"># Did Claude give a final answer? Then stop.</span>
+        <span class="k">if</span> response.stop_reason == <span class="s">"end_turn"</span>:
+            text = <span class="s">""</span>.join(
+                b.text <span class="k">for</span> b <span class="k">in</span> response.content <span class="k">if</span> b.type == <span class="s">"text"</span>
+            )
+            <span class="k">return</span> text
+
+        <span class="c"># Otherwise, it wants to use tools. Run them.</span>
+        messages.append({<span class="s">"role"</span>: <span class="s">"assistant"</span>, <span class="s">"content"</span>: response.content})
+        tool_results = []
+        <span class="k">for</span> block <span class="k">in</span> response.content:
+            <span class="k">if</span> block.type == <span class="s">"tool_use"</span>:
+                fn = TOOLS_BY_NAME[block.name]
+                result = fn(**block.input)
+                <span class="k">print</span>(<span class="s">f"  → {block.name}({block.input}) = {result}"</span>)
+                tool_results.append({
+                    <span class="s">"type"</span>: <span class="s">"tool_result"</span>,
+                    <span class="s">"tool_use_id"</span>: block.id,
+                    <span class="s">"content"</span>: result,
+                })
+        messages.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: tool_results})
+
+    <span class="k">return</span> <span class="s">"(hit max steps)"</span></pre>
+      <div class="info-box">
+        <h3>That's it. That's an agent.</h3>
+        <p>Read the loop carefully — this same pattern scales from toy demos to production coding agents. It's really just: <strong>call model → run tools → call model → repeat</strong>.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Step 5 — Run It</h2>
+      <pre class="code"><span class="k">if</span> __name__ == <span class="s">"__main__"</span>:
+    answer = run_agent(
+        <span class="s">"What's 48 times 17, and is it raining in Tokyo?"</span>
+    )
+    <span class="k">print</span>(<span class="s">"\n"</span> + answer)</pre>
+      <p style="margin-top:12px;font-size:14px;">Run it. You'll see the tool calls stream by, then the final answer. Try your own questions.</p>
+      <div class="info-box">
+        <h3>Expected output</h3>
+        <pre style="background:none;border:none;padding:0;box-shadow:none;color:var(--ink);font-size:14px;">  → calculator({'expression': '48 * 17'}) = 816
+  → get_weather({'city': 'Tokyo'}) = 14°C, light rain
+
+48 × 17 = 816. Tokyo is currently 14°C with light rain, so yes — it's raining there.</pre>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Step 6 — Make It Yours</h2>
+      <p class="section-sub">You now have a working agent. Here's what to try next:</p>
+      <div class="grid cols-3">
+        <div class="card blue">
+          <div class="icon">⌕</div>
+          <h3>Add web search</h3>
+          <p>Wrap a real search API (Brave, Tavily, Exa) as a tool. Suddenly your agent can research.</p>
+        </div>
+        <div class="card yellow">
+          <div class="icon">▤</div>
+          <h3>Add file tools</h3>
+          <p>Give it <code>read_file</code> and <code>write_file</code>. Now it can work on your codebase.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">🧠</div>
+          <h3>Add a system prompt</h3>
+          <p>Set <code>system="..."</code> on the message call. Give the agent a personality or strict rules.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">⚒</div>
+          <h3>Add memory</h3>
+          <p>Persist <code>messages</code> to a file so your agent remembers past conversations.</p>
+        </div>
+        <div class="card orange">
+          <div class="icon">⚡</div>
+          <h3>Stream the output</h3>
+          <p>Use <code>client.messages.stream(...)</code> so responses appear word-by-word.</p>
+        </div>
+        <div class="card purple">
+          <div class="icon">👥</div>
+          <h3>Add a second agent</h3>
+          <p>Have this agent <em>call</em> another agent (a specialist) as a tool. That's multi-agent in 10 lines.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Full Code</h2>
+      <p class="section-sub">The entire agent, in one copy-pastable file. Save as <code>agent.py</code> and run.</p>
+      <pre class="code"><span class="k">from</span> anthropic <span class="k">import</span> Anthropic
+
+client = Anthropic()
+
+<span class="k">def</span> <span class="f">calculator</span>(expression: <span class="k">str</span>) -> <span class="k">str</span>:
+    <span class="k">try</span>:
+        <span class="k">return</span> <span class="k">str</span>(<span class="f">eval</span>(expression, {<span class="s">"__builtins__"</span>: {}}, {}))
+    <span class="k">except</span> Exception <span class="k">as</span> e:
+        <span class="k">return</span> <span class="s">f"error: {e}"</span>
+
+<span class="k">def</span> <span class="f">get_weather</span>(city: <span class="k">str</span>) -> <span class="k">str</span>:
+    fake = {<span class="s">"tokyo"</span>: <span class="s">"14°C, light rain"</span>, <span class="s">"paris"</span>: <span class="s">"18°C, sunny"</span>}
+    <span class="k">return</span> fake.get(city.lower(), <span class="s">"unknown city"</span>)
+
+tools = [
+    {
+        <span class="s">"name"</span>: <span class="s">"calculator"</span>,
+        <span class="s">"description"</span>: <span class="s">"Evaluate a math expression."</span>,
+        <span class="s">"input_schema"</span>: {
+            <span class="s">"type"</span>: <span class="s">"object"</span>,
+            <span class="s">"properties"</span>: {<span class="s">"expression"</span>: {<span class="s">"type"</span>: <span class="s">"string"</span>}},
+            <span class="s">"required"</span>: [<span class="s">"expression"</span>],
+        },
+    },
+    {
+        <span class="s">"name"</span>: <span class="s">"get_weather"</span>,
+        <span class="s">"description"</span>: <span class="s">"Get the current weather for a city."</span>,
+        <span class="s">"input_schema"</span>: {
+            <span class="s">"type"</span>: <span class="s">"object"</span>,
+            <span class="s">"properties"</span>: {<span class="s">"city"</span>: {<span class="s">"type"</span>: <span class="s">"string"</span>}},
+            <span class="s">"required"</span>: [<span class="s">"city"</span>],
+        },
+    },
+]
+
+TOOLS_BY_NAME = {<span class="s">"calculator"</span>: calculator, <span class="s">"get_weather"</span>: get_weather}
+
+<span class="k">def</span> <span class="f">run_agent</span>(user_message: <span class="k">str</span>, max_steps: <span class="k">int</span> = <span class="s">10</span>):
+    messages = [{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: user_message}]
+    <span class="k">for</span> _ <span class="k">in</span> <span class="f">range</span>(max_steps):
+        response = client.messages.create(
+            model=<span class="s">"claude-sonnet-4-6"</span>,
+            max_tokens=<span class="s">1024</span>,
+            tools=tools,
+            messages=messages,
+        )
+        <span class="k">if</span> response.stop_reason == <span class="s">"end_turn"</span>:
+            <span class="k">return</span> <span class="s">""</span>.join(
+                b.text <span class="k">for</span> b <span class="k">in</span> response.content <span class="k">if</span> b.type == <span class="s">"text"</span>
+            )
+        messages.append({<span class="s">"role"</span>: <span class="s">"assistant"</span>, <span class="s">"content"</span>: response.content})
+        results = []
+        <span class="k">for</span> block <span class="k">in</span> response.content:
+            <span class="k">if</span> block.type == <span class="s">"tool_use"</span>:
+                fn = TOOLS_BY_NAME[block.name]
+                out = fn(**block.input)
+                <span class="k">print</span>(<span class="s">f"  → {block.name}({block.input}) = {out}"</span>)
+                results.append({
+                    <span class="s">"type"</span>: <span class="s">"tool_result"</span>,
+                    <span class="s">"tool_use_id"</span>: block.id,
+                    <span class="s">"content"</span>: out,
+                })
+        messages.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: results})
+    <span class="k">return</span> <span class="s">"(hit max steps)"</span>
+
+<span class="k">if</span> __name__ == <span class="s">"__main__"</span>:
+    <span class="k">print</span>(run_agent(<span class="s">"What's 48 times 17, and is it raining in Tokyo?"</span>))</pre>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Where to Go Next</h2>
+      <div class="grid cols-2">
+        <a href="frameworks.html" class="card orange" style="text-decoration:none;">
+          <div class="icon">→</div>
+          <h3>Frameworks</h3>
+          <p>You wrote the loop by hand. Now see which frameworks take over when your agent gets bigger.</p>
+        </a>
+        <a href="agents.html" class="card green" style="text-decoration:none;">
+          <div class="icon">→</div>
+          <h3>Agent Concepts</h3>
+          <p>Go deeper on memory, multi-agent systems, and the pitfalls to avoid in production.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">Tutorial · Hands on</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>
