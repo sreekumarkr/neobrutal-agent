@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Glossary — AI Academy</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link">Foundations</a></li>
+        <li><a href="llms.html" class="link">LLMs</a></li>
+        <li><a href="agents.html" class="link">Agents</a></li>
+        <li><a href="frameworks.html" class="link">Frameworks</a></li>
+        <li><a href="glossary.html" class="link active">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero purple">
+      <h1>The <span class="pop">Glossary</span></h1>
+      <p class="lede">Every weird acronym, plainly defined. Type to filter. No PhD required.</p>
+    </header>
+
+    <section>
+      <div class="demo">
+        <h4>Search</h4>
+        <input id="glossary-search" type="text" placeholder="Try: RAG, agent, attention, MCP..." />
+      </div>
+
+      <div class="glossary-list">
+
+        <div class="term"><h4><span class="letter">A</span>Agent</h4><p>An LLM hooked up to tools and a loop, capable of taking multi-step actions to achieve a goal.</p></div>
+        <div class="term"><h4><span class="letter">A</span>AGI</h4><p>Artificial General Intelligence — a hypothetical AI that matches or exceeds human capability across all cognitive tasks. Doesn't exist yet (depending who you ask).</p></div>
+        <div class="term"><h4><span class="letter">A</span>Attention</h4><p>The mechanism by which a transformer decides which other tokens to focus on when processing each token. The "Attention Is All You Need" paper kicked off the modern LLM era.</p></div>
+
+        <div class="term"><h4><span class="letter">B</span>Backpropagation</h4><p>The algorithm used to train neural networks by computing how much each weight contributed to the error and nudging it the right direction.</p></div>
+        <div class="term"><h4><span class="letter">B</span>Benchmark</h4><p>A standardized test for AI models. MMLU, HumanEval, GSM8K, GPQA — these are how researchers brag.</p></div>
+
+        <div class="term"><h4><span class="letter">C</span>Context Window</h4><p>The max number of tokens an LLM can consider at once — your prompt + history + response. Bigger = the model can read more.</p></div>
+        <div class="term"><h4><span class="letter">C</span>CoT (Chain of Thought)</h4><p>A prompting technique where you ask the model to reason step by step before answering. Often dramatically improves accuracy.</p></div>
+
+        <div class="term"><h4><span class="letter">D</span>Diffusion Model</h4><p>The architecture behind most modern image generators (Stable Diffusion, DALL-E, Midjourney). Learns by gradually denoising random noise into images.</p></div>
+        <div class="term"><h4><span class="letter">D</span>Distillation</h4><p>Training a small model to imitate a big one. The small model gets most of the capability for a fraction of the cost.</p></div>
+
+        <div class="term"><h4><span class="letter">E</span>Embedding</h4><p>A vector (list of numbers) that represents the meaning of a piece of text or data. Similar things have similar embeddings.</p></div>
+        <div class="term"><h4><span class="letter">E</span>Eval</h4><p>A test you run on a model or agent to measure its quality. The best AI teams obsess over evals.</p></div>
+
+        <div class="term"><h4><span class="letter">F</span>Few-shot</h4><p>Showing the model a handful of examples in the prompt before asking it to do the task. Often beats zero-shot dramatically.</p></div>
+        <div class="term"><h4><span class="letter">F</span>Fine-tuning</h4><p>Continuing to train a pretrained model on a smaller, more specific dataset to specialize it.</p></div>
+
+        <div class="term"><h4><span class="letter">G</span>GPU</h4><p>Graphics Processing Unit. Parallel-math monsters originally for video games, now the engine of all modern AI training.</p></div>
+        <div class="term"><h4><span class="letter">G</span>Grounding</h4><p>Connecting an LLM's output to an authoritative source (a document, a database) to keep it from hallucinating.</p></div>
+
+        <div class="term"><h4><span class="letter">H</span>Hallucination</h4><p>When an LLM generates something confidently wrong — a fake citation, a non-existent function, a made-up fact.</p></div>
+        <div class="term"><h4><span class="letter">H</span>Hyperparameter</h4><p>A setting you choose before training (learning rate, batch size, model size) — not learned by the model itself.</p></div>
+
+        <div class="term"><h4><span class="letter">I</span>Inference</h4><p>The act of using a trained model to make a prediction. The cheap, fast part of an AI model's life.</p></div>
+
+        <div class="term"><h4><span class="letter">L</span>LLM</h4><p>Large Language Model — a neural network trained on huge amounts of text to predict the next token.</p></div>
+        <div class="term"><h4><span class="letter">L</span>LoRA</h4><p>Low-Rank Adaptation — a cheap way to fine-tune big models by only training a small set of extra weights.</p></div>
+
+        <div class="term"><h4><span class="letter">M</span>MCP</h4><p>Model Context Protocol — an open standard from Anthropic for connecting AI agents to tools and data sources, the same way USB connects devices.</p></div>
+        <div class="term"><h4><span class="letter">M</span>MoE</h4><p>Mixture of Experts — an architecture where only a subset of the model's weights activates for each token, making giant models efficient. Mixtral, DeepSeek, and GPT-4 are rumored to use this.</p></div>
+        <div class="term"><h4><span class="letter">M</span>Multimodal</h4><p>A model that handles more than one kind of input — text + images + audio + video.</p></div>
+
+        <div class="term"><h4><span class="letter">N</span>Neural Network</h4><p>A stack of simple math units ("neurons") connected by weighted edges. The basic building block of all modern AI.</p></div>
+
+        <div class="term"><h4><span class="letter">O</span>Overfitting</h4><p>When a model memorizes its training data instead of learning generalizable patterns. The classic ML villain.</p></div>
+
+        <div class="term"><h4><span class="letter">P</span>Parameters</h4><p>The weights inside a neural network. GPT-4 has ~1 trillion of them.</p></div>
+        <div class="term"><h4><span class="letter">P</span>Prompt Engineering</h4><p>The dark art of writing prompts that get LLMs to do what you actually want.</p></div>
+        <div class="term"><h4><span class="letter">P</span>Prompt Injection</h4><p>An attack where someone slips instructions into the data an agent reads, hijacking its behavior.</p></div>
+
+        <div class="term"><h4><span class="letter">Q</span>Quantization</h4><p>Compressing a model by storing its weights with fewer bits. Makes models smaller and faster with a small accuracy cost.</p></div>
+
+        <div class="term"><h4><span class="letter">R</span>RAG</h4><p>Retrieval-Augmented Generation — fetch relevant documents first, then feed them to the LLM. The standard way to give a model access to fresh or private data.</p></div>
+        <div class="term"><h4><span class="letter">R</span>ReAct</h4><p>Reasoning + Acting — the agent loop where the model alternates between thinking out loud and using tools.</p></div>
+        <div class="term"><h4><span class="letter">R</span>RLHF</h4><p>Reinforcement Learning from Human Feedback. The technique used to fine-tune raw LLMs into helpful chatbots.</p></div>
+
+        <div class="term"><h4><span class="letter">S</span>SFT</h4><p>Supervised Fine-Tuning — fine-tuning on labeled examples of "input → desired output".</p></div>
+        <div class="term"><h4><span class="letter">S</span>System Prompt</h4><p>The hidden instructions an LLM sees before the user's message. Sets the model's role, rules, and tone.</p></div>
+
+        <div class="term"><h4><span class="letter">T</span>Temperature</h4><p>A knob that controls how random the LLM's output is. 0 = deterministic. 1+ = creative chaos.</p></div>
+        <div class="term"><h4><span class="letter">T</span>Token</h4><p>A chunk of text the model actually sees. Roughly ¾ of an English word. Pricing on most LLM APIs is per token.</p></div>
+        <div class="term"><h4><span class="letter">T</span>Tool Use</h4><p>An LLM's ability to call functions (search, calculator, APIs) instead of just generating text.</p></div>
+        <div class="term"><h4><span class="letter">T</span>Transformer</h4><p>The neural network architecture invented in 2017 that powers every modern LLM.</p></div>
+
+        <div class="term"><h4><span class="letter">V</span>Vector Database</h4><p>A database optimized for storing and searching embeddings by similarity. Pinecone, Weaviate, Chroma, Qdrant.</p></div>
+
+        <div class="term"><h4><span class="letter">W</span>Weights</h4><p>The numbers inside a neural network that get adjusted during training. "Open weights" means you can download them.</p></div>
+
+        <div class="term"><h4><span class="letter">Z</span>Zero-shot</h4><p>Asking the model to do a task with no examples — just an instruction. The opposite of few-shot.</p></div>
+
+      </div>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">Glossary · 5 of 5</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>

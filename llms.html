@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Large Language Models — AI Academy</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link">Foundations</a></li>
+        <li><a href="llms.html" class="link active">LLMs</a></li>
+        <li><a href="agents.html" class="link">Agents</a></li>
+        <li><a href="frameworks.html" class="link">Frameworks</a></li>
+        <li><a href="glossary.html" class="link">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero yellow">
+      <h1>Large <span class="pop">Language</span><br/>Models</h1>
+      <p class="lede">A neural network the size of a small country, trained to do one thing: predict the next word. From that humble objective, you get GPT, Claude, Gemini — and most of the AI you use every day.</p>
+      <div class="doodle" style="top:20px;right:40px;">"..."</div>
+    </header>
+
+    <section class="reveal">
+      <h2 class="section-title">The Big Idea (in 3 sentences)</h2>
+      <div class="info-box">
+        <p style="font-size:18px;">An LLM is a neural network trained on a huge pile of text. Its job is dead simple: <strong>given some words, predict the next word</strong>. Repeat that prediction over and over and you get sentences, paragraphs, code, poems, and answers to questions.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Tokens — The Atoms of Language</h2>
+      <p class="section-sub">LLMs don't actually see words. They see <strong>tokens</strong> — chunks that might be a whole word, a piece of a word, or even punctuation. Try it:</p>
+
+      <div class="demo" id="tokenizer">
+        <h4>Try the Tokenizer</h4>
+        <input id="tok-input" type="text" value="Neobrutalism is loud and unforgettable!" />
+        <div class="token-out" id="tok-out"></div>
+        <p style="margin-top:14px;font-size:13px;font-weight:700;">Token count: <span id="tok-count" style="background:var(--ink);color:var(--green);padding:2px 8px;">0</span></p>
+        <p style="margin-top:10px;font-size:13px;">(This is a simplified demo — real tokenizers like <code>tiktoken</code> use learned vocabularies of ~100k tokens.)</p>
+      </div>
+
+      <div class="info-box">
+        <h3>Why tokens?</h3>
+        <ul>
+          <li>Splitting on whitespace would make the vocabulary infinite (every misspelling = a new word).</li>
+          <li>Splitting on characters would lose meaning (the model would have to relearn what "the" means every time).</li>
+          <li>Subword tokens are the sweet spot. Common words become one token. Rare words break into smaller pieces.</li>
+          <li>Pricing on most LLM APIs is <strong>per token</strong>. ~1 token ≈ 4 English characters ≈ ¾ of a word.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Embeddings — Words as Coordinates</h2>
+      <p class="section-sub">Once you have tokens, you turn each one into a vector — a list of hundreds or thousands of numbers. This vector is the token's <strong>embedding</strong>: its position in a high-dimensional "meaning space".</p>
+      <div class="grid cols-2">
+        <div class="card blue">
+          <div class="icon">⊞</div>
+          <h3>Similar meaning = close in space</h3>
+          <p>"king" and "queen" land near each other. "king" and "banana" don't. The model learned this purely from context — words that appear near similar words get similar embeddings.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">+/-</div>
+          <h3>Vector arithmetic works</h3>
+          <p>Famously: <code>king − man + woman ≈ queen</code>. Embeddings turn meaning into math, and that's what makes the rest of the model possible.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">The Transformer (without the math)</h2>
+      <p class="section-sub">Every modern LLM is built on the <strong>Transformer</strong> architecture, introduced by Google in 2017. The magic ingredient: <strong>self-attention</strong>.</p>
+
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="Helvetica, sans-serif" font-weight="900" font-size="14">
+            <!-- input tokens -->
+            <g>
+              <rect x="20" y="40" width="80" height="40" fill="#7dd3fc" stroke="#0a0a0a" stroke-width="4" />
+              <text x="60" y="65" text-anchor="middle">The</text>
+              <rect x="20" y="100" width="80" height="40" fill="#ffe45e" stroke="#0a0a0a" stroke-width="4" />
+              <text x="60" y="125" text-anchor="middle">cat</text>
+              <rect x="20" y="160" width="80" height="40" fill="#ff6b9d" stroke="#0a0a0a" stroke-width="4" />
+              <text x="60" y="185" text-anchor="middle">sat</text>
+            </g>
+            <!-- attention block -->
+            <rect x="180" y="50" width="220" height="140" fill="#a3e635" stroke="#0a0a0a" stroke-width="4" />
+            <text x="290" y="105" text-anchor="middle" font-size="16">SELF-</text>
+            <text x="290" y="125" text-anchor="middle" font-size="16">ATTENTION</text>
+            <text x="290" y="150" text-anchor="middle" font-size="11">(every token looks</text>
+            <text x="290" y="165" text-anchor="middle" font-size="11">at every other token)</text>
+            <!-- arrows in -->
+            <g stroke="#0a0a0a" stroke-width="3" fill="none">
+              <line x1="100" y1="60" x2="180" y2="80" marker-end="url(#arr)" />
+              <line x1="100" y1="120" x2="180" y2="120" marker-end="url(#arr)" />
+              <line x1="100" y1="180" x2="180" y2="160" marker-end="url(#arr)" />
+              <line x1="400" y1="120" x2="480" y2="120" marker-end="url(#arr)" />
+            </g>
+            <!-- output -->
+            <rect x="480" y="100" width="140" height="40" fill="#fb923c" stroke="#0a0a0a" stroke-width="4" />
+            <text x="550" y="125" text-anchor="middle">on (next?)</text>
+          </g>
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#0a0a0a" />
+            </marker>
+          </defs>
+        </svg>
+        <div class="caption">A toy view of self-attention</div>
+      </div>
+
+      <div class="info-box">
+        <h3>What is self-attention, really?</h3>
+        <p>For every token in the input, the model asks: <em>"which other tokens should I pay attention to right now?"</em> When predicting the next word in <code>"The cat sat on the ___"</code>, the model needs to look at "cat" and "sat" much more than "the". Attention learns these weights automatically.</p>
+        <p>Transformers stack dozens of attention layers on top of each other. Each layer refines the representation. By the top, the model has built up a rich understanding of the input — enough to produce the next token with frightening accuracy.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">The Context Window</h2>
+      <div class="grid cols-2">
+        <div class="info-box">
+          <h3>What it is</h3>
+          <p>The maximum number of tokens an LLM can consider at once — your prompt + the conversation history + the response. Past that, things drop off the end like a sliding window.</p>
+        </div>
+        <div class="info-box">
+          <h3>Why it matters</h3>
+          <p>Bigger context = the model can read longer documents, remember longer conversations, and use more tools. Modern models range from 4k tokens (small) to 1M+ tokens (Claude, Gemini).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">From Pretraining to ChatGPT</h2>
+      <p class="section-sub">Raw LLMs are weird. They'll happily continue any text — including offensive, useless, or wrong stuff. Three steps turn a raw model into a helpful chatbot.</p>
+      <div class="grid cols-3">
+        <div class="card pink">
+          <div class="icon">1</div>
+          <h3>Pretraining</h3>
+          <p>Show the model trillions of tokens of internet text. It learns grammar, facts, style, code — by predicting the next token, over and over.</p>
+        </div>
+        <div class="card yellow">
+          <div class="icon">2</div>
+          <h3>Fine-tuning</h3>
+          <p>Show it high-quality examples of helpful conversations. It learns the format and tone you actually want.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">3</div>
+          <h3>RLHF</h3>
+          <p>Humans rate the model's responses. The model gets a reward signal and learns to prefer responses humans like. ChatGPT was the breakout demo of this technique.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">The Major Models (2026 edition)</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Maker</th>
+            <th>Strengths</th>
+            <th>Open?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Claude</strong> (Opus / Sonnet / Haiku)</td><td>Anthropic</td><td>Long context, careful reasoning, agents, code</td><td><span class="tag pink">No</span></td></tr>
+          <tr><td><strong>GPT-4 / GPT-4o</strong></td><td>OpenAI</td><td>General reasoning, vision, broad ecosystem</td><td><span class="tag pink">No</span></td></tr>
+          <tr><td><strong>Gemini</strong> (Pro / Ultra)</td><td>Google</td><td>Massive context, multimodal, search integration</td><td><span class="tag pink">No</span></td></tr>
+          <tr><td><strong>Llama 3</strong></td><td>Meta</td><td>Strong open weights, easy to fine-tune</td><td><span class="tag green">Yes</span></td></tr>
+          <tr><td><strong>Mistral / Mixtral</strong></td><td>Mistral AI</td><td>Efficient, sparse mixture-of-experts</td><td><span class="tag green">Yes</span></td></tr>
+          <tr><td><strong>DeepSeek</strong></td><td>DeepSeek</td><td>Strong reasoning, very efficient training</td><td><span class="tag green">Yes</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Things LLMs are Bad At</h2>
+      <p class="section-sub">Loving LLMs means knowing where they break.</p>
+      <div class="grid cols-3">
+        <div class="card orange">
+          <div class="icon">⚠</div>
+          <h3>Hallucination</h3>
+          <p>Confidently making things up. Citations, statistics, code APIs that don't exist. Always verify.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">⚠</div>
+          <h3>Math</h3>
+          <p>Especially multi-step arithmetic. Give them a calculator tool instead.</p>
+        </div>
+        <div class="card purple">
+          <div class="icon">⚠</div>
+          <h3>Recency</h3>
+          <p>Their knowledge is frozen at the training cutoff. Need fresh info? Use retrieval or search tools.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Up Next</h2>
+      <a href="agents.html" class="card green" style="text-decoration:none;display:block;">
+        <div class="icon">→</div>
+        <h3>AI Agents</h3>
+        <p>An LLM by itself just predicts text. Hook it up to tools and a loop, and suddenly it can browse the web, write code, send emails, and finish your TODOs while you sleep.</p>
+      </a>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">LLMs · 2 of 5</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>

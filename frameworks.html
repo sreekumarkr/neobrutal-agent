@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Frameworks — AI Academy</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link">Foundations</a></li>
+        <li><a href="llms.html" class="link">LLMs</a></li>
+        <li><a href="agents.html" class="link">Agents</a></li>
+        <li><a href="frameworks.html" class="link active">Frameworks</a></li>
+        <li><a href="glossary.html" class="link">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero orange">
+      <h1>The <span class="pop">Frameworks</span></h1>
+      <p class="lede">A field guide to the tools you'll actually use to build with AI. From low-level model libraries to high-level agent orchestrators — what each one is good at and when to skip it.</p>
+      <div class="doodle" style="top:30px;right:40px;">{ }</div>
+    </header>
+
+    <section class="reveal">
+      <h2 class="section-title">Two Layers</h2>
+      <p class="section-sub">There are roughly two layers of AI tooling. Pick the one that matches your problem.</p>
+      <div class="grid cols-2">
+        <div class="card blue">
+          <div class="icon">▼</div>
+          <h3>Model layer</h3>
+          <p>Train, fine-tune, and run models. PyTorch, TensorFlow, Hugging Face Transformers. You're here if you're a researcher or you need to ship something custom.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">▲</div>
+          <h3>App layer</h3>
+          <p>Build apps on top of someone else's model (usually via API). LangChain, LlamaIndex, Claude Agent SDK, CrewAI. You're here if you're a developer building an AI feature.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">App-Layer Frameworks</h2>
+      <p class="section-sub">These are the libraries you'll reach for when building agents and LLM-powered apps.</p>
+
+      <div class="grid cols-2">
+
+        <div class="card yellow">
+          <div class="icon">🦜</div>
+          <h3>LangChain</h3>
+          <p><strong>What:</strong> The original LLM app framework. Chains, agents, memory, tool integrations — all the building blocks.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Prototyping fast, gluing together many services, RAG pipelines.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Big surface area, lots of abstractions. Easy to start, sometimes hard to debug.</p>
+        </div>
+
+        <div class="card blue">
+          <div class="icon">🦙</div>
+          <h3>LlamaIndex</h3>
+          <p><strong>What:</strong> A data framework for LLM apps. Specializes in connecting your private data to a model — ingestion, indexing, retrieval.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> RAG over documents, knowledge bases, structured data Q&A.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Less of a general agent framework — leans heavily on the retrieval angle.</p>
+        </div>
+
+        <div class="card pink">
+          <div class="icon">▲</div>
+          <h3>Claude Agent SDK</h3>
+          <p><strong>What:</strong> Anthropic's official SDK for building agents on Claude. Tool use, memory, sub-agents, MCP — first-class.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Production-grade agents that need careful reasoning and long context.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Tied to Claude. (If that's a feature, great.)</p>
+        </div>
+
+        <div class="card green">
+          <div class="icon">○</div>
+          <h3>OpenAI Assistants API</h3>
+          <p><strong>What:</strong> OpenAI's hosted way to build assistants with tools, file search, and code interpreter built in.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Quick-to-ship assistants without standing up your own infra.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Locked to OpenAI. Less control over the loop than a SDK approach.</p>
+        </div>
+
+        <div class="card orange">
+          <div class="icon">⚒</div>
+          <h3>CrewAI</h3>
+          <p><strong>What:</strong> A framework for building <em>teams</em> of agents that collaborate on a goal — each with a role, tools, and personality.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Complex tasks that decompose naturally into specialist roles.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Multi-agent overhead. Often a single well-prompted agent is enough.</p>
+        </div>
+
+        <div class="card purple">
+          <div class="icon">⊕</div>
+          <h3>AutoGen</h3>
+          <p><strong>What:</strong> Microsoft's multi-agent framework. Agents talk to each other in a conversation to solve problems.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Research-y multi-agent setups, code-generation pipelines, and human-in-the-loop flows.</p>
+          <p style="margin-top:10px;"><strong>Trade-off:</strong> Same as CrewAI — complexity has a cost.</p>
+        </div>
+
+        <div class="card blue">
+          <div class="icon">⌕</div>
+          <h3>Haystack</h3>
+          <p><strong>What:</strong> A modular framework for search-heavy LLM apps. RAG, document QA, semantic search.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Production search and retrieval pipelines you want full control over.</p>
+        </div>
+
+        <div class="card yellow">
+          <div class="icon">≡</div>
+          <h3>LangGraph</h3>
+          <p><strong>What:</strong> LangChain's graph-based way to build agent workflows. Nodes and edges instead of opaque chains.</p>
+          <p style="margin-top:10px;"><strong>Best for:</strong> Agents with branching logic, retries, and human checkpoints.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Model-Layer Tools</h2>
+      <div class="grid cols-3">
+        <div class="card pink">
+          <div class="icon">🔥</div>
+          <h3>PyTorch</h3>
+          <p>The deep learning framework that won. Almost all modern AI research happens here.</p>
+        </div>
+        <div class="card blue">
+          <div class="icon">🤗</div>
+          <h3>Hugging Face</h3>
+          <p>The GitHub of models. <code>transformers</code>, <code>datasets</code>, <code>diffusers</code>, and 500k+ open models.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">⚡</div>
+          <h3>vLLM / Ollama</h3>
+          <p>Run open models locally or on your own infra. vLLM is for production throughput; Ollama is for laptops.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Quick Comparison</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Framework</th>
+            <th>Best At</th>
+            <th>Language</th>
+            <th>Layer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>LangChain</strong></td><td>General LLM apps, RAG, prototyping</td><td>Python, JS</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>LlamaIndex</strong></td><td>Retrieval / RAG over private data</td><td>Python, JS</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>Claude Agent SDK</strong></td><td>Production agents on Claude</td><td>Python, TS</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>OpenAI Assistants</strong></td><td>Hosted assistants on OpenAI</td><td>Any (HTTP)</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>CrewAI</strong></td><td>Multi-agent role-based teams</td><td>Python</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>AutoGen</strong></td><td>Multi-agent conversations</td><td>Python</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>LangGraph</strong></td><td>Stateful agent workflows</td><td>Python, JS</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>Haystack</strong></td><td>Search-heavy pipelines</td><td>Python</td><td><span class="tag green">App</span></td></tr>
+          <tr><td><strong>PyTorch</strong></td><td>Training & research</td><td>Python</td><td><span class="tag blue">Model</span></td></tr>
+          <tr><td><strong>Hugging Face</strong></td><td>Open models & datasets</td><td>Python</td><td><span class="tag blue">Model</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">A Tiny Agent in Code</h2>
+      <p class="section-sub">Here's roughly what building an agent looks like with the Claude Agent SDK. (Pseudocode — but very close.)</p>
+      <pre class="code"><span class="k">from</span> claude_agent_sdk <span class="k">import</span> Agent, tool
+
+<span class="k">@tool</span>
+<span class="k">def</span> <span class="f">get_weather</span>(city: <span class="k">str</span>) -> <span class="k">dict</span>:
+    <span class="s">"""Get the current weather for a city."""</span>
+    <span class="k">return</span> weather_api.fetch(city)
+
+<span class="k">@tool</span>
+<span class="k">def</span> <span class="f">send_email</span>(to: <span class="k">str</span>, subject: <span class="k">str</span>, body: <span class="k">str</span>):
+    <span class="s">"""Send an email."""</span>
+    mailer.send(to, subject, body)
+
+agent = Agent(
+    model=<span class="s">"claude-opus-4-6"</span>,
+    tools=[get_weather, send_email],
+    system=<span class="s">"You are a helpful travel assistant."</span>
+)
+
+agent.run(<span class="s">"Check the weather in Tokyo and email me a packing list."</span>)</pre>
+      <p style="margin-top:14px;font-size:14px;">That's it. The agent figures out the order of operations on its own.</p>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Which Should I Use?</h2>
+      <div class="info-box">
+        <h3>Honest opinion</h3>
+        <ul>
+          <li><strong>Building a small AI feature?</strong> Skip frameworks. Just call the LLM API directly. Frameworks shine when you have at least a few moving parts.</li>
+          <li><strong>RAG over documents?</strong> Start with LlamaIndex.</li>
+          <li><strong>General LLM app with lots of integrations?</strong> LangChain / LangGraph.</li>
+          <li><strong>A production agent?</strong> Claude Agent SDK or write a tight loop yourself.</li>
+          <li><strong>Multi-agent system?</strong> Try CrewAI, but ask first whether one agent could do it.</li>
+          <li><strong>Self-hosting open models?</strong> Hugging Face + vLLM (server) or Ollama (laptop).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Up Next</h2>
+      <a href="glossary.html" class="card purple" style="text-decoration:none;display:block;">
+        <div class="icon">→</div>
+        <h3>The Glossary</h3>
+        <p>Every weird acronym defined in plain English. Searchable, no scrolling.</p>
+      </a>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">Frameworks · 4 of 5</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>

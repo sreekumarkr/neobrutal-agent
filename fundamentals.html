@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Foundations — AI Academy</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link active">Foundations</a></li>
+        <li><a href="llms.html" class="link">LLMs</a></li>
+        <li><a href="agents.html" class="link">Agents</a></li>
+        <li><a href="frameworks.html" class="link">Frameworks</a></li>
+        <li><a href="glossary.html" class="link">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero blue">
+      <h1>The <span class="pop">Foundations</span></h1>
+      <p class="lede">Before you can love or hate AI, you have to know what it actually is. Here's the 15-minute version — neural networks, training, and the difference between AI, ML, and DL.</p>
+      <div class="doodle" style="top:30px;right:60px;">⚙</div>
+    </header>
+
+    <section class="reveal">
+      <h2 class="section-title">AI vs ML vs DL</h2>
+      <p class="section-sub">These three terms get used interchangeably. They're not the same. Think of them as nested Russian dolls.</p>
+      <div class="grid cols-3">
+        <div class="card pink">
+          <div class="icon">AI</div>
+          <h3>Artificial Intelligence</h3>
+          <p>The biggest box. Any technique that makes a machine seem intelligent — including hand-coded rules, search algorithms, and yes, machine learning.</p>
+        </div>
+        <div class="card yellow">
+          <div class="icon">ML</div>
+          <h3>Machine Learning</h3>
+          <p>A subset of AI. Instead of writing rules, you show the machine examples and it figures out the patterns. Linear regression to random forests live here.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">DL</div>
+          <h3>Deep Learning</h3>
+          <p>A subset of ML using <strong>neural networks with many layers</strong>. This is what powers modern AI — image recognition, LLMs, all of it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">What's a Neural Network?</h2>
+      <p class="section-sub">A neural network is a stack of "neurons" — simple math units — connected by weighted lines. Inputs come in the left, predictions come out the right.</p>
+
+      <div class="diagram-wrap" id="nn">
+        <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+          <!-- connections -->
+          <g stroke="#0a0a0a" stroke-width="2" opacity="0.4">
+            <!-- input to hidden1 -->
+            <line x1="100" y1="60" x2="240" y2="50" />
+            <line x1="100" y1="60" x2="240" y2="120" />
+            <line x1="100" y1="60" x2="240" y2="190" />
+            <line x1="100" y1="60" x2="240" y2="260" />
+            <line x1="100" y1="160" x2="240" y2="50" />
+            <line x1="100" y1="160" x2="240" y2="120" />
+            <line x1="100" y1="160" x2="240" y2="190" />
+            <line x1="100" y1="160" x2="240" y2="260" />
+            <line x1="100" y1="260" x2="240" y2="50" />
+            <line x1="100" y1="260" x2="240" y2="120" />
+            <line x1="100" y1="260" x2="240" y2="190" />
+            <line x1="100" y1="260" x2="240" y2="260" />
+            <!-- hidden1 to hidden2 -->
+            <line x1="240" y1="50" x2="380" y2="80" />
+            <line x1="240" y1="50" x2="380" y2="160" />
+            <line x1="240" y1="50" x2="380" y2="240" />
+            <line x1="240" y1="120" x2="380" y2="80" />
+            <line x1="240" y1="120" x2="380" y2="160" />
+            <line x1="240" y1="120" x2="380" y2="240" />
+            <line x1="240" y1="190" x2="380" y2="80" />
+            <line x1="240" y1="190" x2="380" y2="160" />
+            <line x1="240" y1="190" x2="380" y2="240" />
+            <line x1="240" y1="260" x2="380" y2="80" />
+            <line x1="240" y1="260" x2="380" y2="160" />
+            <line x1="240" y1="260" x2="380" y2="240" />
+            <!-- hidden2 to output -->
+            <line x1="380" y1="80" x2="520" y2="120" />
+            <line x1="380" y1="80" x2="520" y2="200" />
+            <line x1="380" y1="160" x2="520" y2="120" />
+            <line x1="380" y1="160" x2="520" y2="200" />
+            <line x1="380" y1="240" x2="520" y2="120" />
+            <line x1="380" y1="240" x2="520" y2="200" />
+          </g>
+          <!-- nodes -->
+          <g stroke="#0a0a0a" stroke-width="4">
+            <circle class="nn-node" cx="100" cy="60" r="22" fill="#fff" />
+            <circle class="nn-node" cx="100" cy="160" r="22" fill="#fff" />
+            <circle class="nn-node" cx="100" cy="260" r="22" fill="#fff" />
+            <circle class="nn-node" cx="240" cy="50" r="22" fill="#fff" />
+            <circle class="nn-node" cx="240" cy="120" r="22" fill="#fff" />
+            <circle class="nn-node" cx="240" cy="190" r="22" fill="#fff" />
+            <circle class="nn-node" cx="240" cy="260" r="22" fill="#fff" />
+            <circle class="nn-node" cx="380" cy="80" r="22" fill="#fff" />
+            <circle class="nn-node" cx="380" cy="160" r="22" fill="#fff" />
+            <circle class="nn-node" cx="380" cy="240" r="22" fill="#fff" />
+            <circle class="nn-node" cx="520" cy="120" r="22" fill="#fff" />
+            <circle class="nn-node" cx="520" cy="200" r="22" fill="#fff" />
+          </g>
+          <!-- labels -->
+          <g font-family="Helvetica, sans-serif" font-weight="900" font-size="14" text-anchor="middle">
+            <text x="100" y="305">INPUT</text>
+            <text x="240" y="305">HIDDEN</text>
+            <text x="380" y="305">HIDDEN</text>
+            <text x="520" y="245">OUTPUT</text>
+          </g>
+        </svg>
+        <div class="caption">A 4-layer neural network — animated</div>
+      </div>
+
+      <div class="info-box">
+        <h3>How it actually works</h3>
+        <ul>
+          <li><strong>Inputs</strong> become numbers (a pixel, a word, a stock price).</li>
+          <li>Each connection has a <strong>weight</strong>. Each neuron multiplies its inputs by weights, sums them, and squashes the result through an <strong>activation function</strong>.</li>
+          <li>The output is a prediction. At first, it's random garbage.</li>
+          <li>We compare the prediction to the right answer, calculate the <strong>error</strong>, and use a trick called <strong>backpropagation</strong> to nudge the weights in the direction that reduces the error.</li>
+          <li>Repeat ~a billion times. The network gets eerily good at the task.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Three Flavors of Learning</h2>
+      <div class="grid cols-3">
+        <div class="card blue">
+          <div class="icon">→</div>
+          <h3>Supervised</h3>
+          <p>You give the model labeled examples ("this image is a cat", "this email is spam"). It learns the mapping. The most common kind.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">⊙</div>
+          <h3>Unsupervised</h3>
+          <p>No labels — the model finds structure on its own. Clustering customers, finding anomalies, learning embeddings.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">★</div>
+          <h3>Reinforcement</h3>
+          <p>The model takes actions in an environment and gets rewards or penalties. How AlphaGo learned to play, and how LLMs get fine-tuned with RLHF.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Training vs Inference</h2>
+      <p class="section-sub">Two completely different stages of an AI model's life.</p>
+      <div class="grid cols-2">
+        <div class="card yellow">
+          <div class="icon">⚒</div>
+          <h3>Training</h3>
+          <p>The slow, expensive part. You feed the model billions of examples and gradually tune billions of weights. Takes weeks, costs millions, melts GPUs.</p>
+          <p style="margin-top:10px;"><strong>Done once.</strong> (Or every few months.)</p>
+        </div>
+        <div class="card orange">
+          <div class="icon">⚡</div>
+          <h3>Inference</h3>
+          <p>The fast, cheap part. The model is already trained — now you just feed in a new input and get a prediction. Milliseconds, not weeks.</p>
+          <p style="margin-top:10px;"><strong>Done every time you use ChatGPT.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Key Terms You'll See</h2>
+      <div class="grid cols-2">
+        <div class="info-box">
+          <h3>Parameters</h3>
+          <p>The weights inside the network. GPT-4 has roughly a trillion. More parameters ≈ more capacity to learn (up to a point).</p>
+        </div>
+        <div class="info-box">
+          <h3>Loss / Error</h3>
+          <p>How wrong the model is. Training is just "minimize the loss" — repeated forever.</p>
+        </div>
+        <div class="info-box">
+          <h3>Gradient Descent</h3>
+          <p>The optimization trick. The gradient tells you which direction reduces the loss; you take a tiny step that way. Then another. And another.</p>
+        </div>
+        <div class="info-box">
+          <h3>Overfitting</h3>
+          <p>When a model memorizes its training data instead of learning real patterns. Tested in the wild, it fails. The classic ML villain.</p>
+        </div>
+        <div class="info-box">
+          <h3>Epochs & Batches</h3>
+          <p>An epoch is one full pass over the training data. A batch is a small chunk processed at once. You train for many epochs, batch by batch.</p>
+        </div>
+        <div class="info-box">
+          <h3>Tensor</h3>
+          <p>A multi-dimensional array of numbers. The fundamental data structure of deep learning. (PyTorch and TensorFlow are named after them.)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Up Next</h2>
+      <div class="grid cols-2">
+        <a href="llms.html" class="card yellow" style="text-decoration:none;">
+          <div class="icon">→</div>
+          <h3>Large Language Models</h3>
+          <p>Now that you know what a neural net is — let's see what happens when you make one really, really big and feed it the entire internet.</p>
+        </a>
+        <a href="agents.html" class="card green" style="text-decoration:none;">
+          <div class="icon">→</div>
+          <h3>AI Agents</h3>
+          <p>Skip ahead — see what happens when you give an LLM hands.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">Foundations · 1 of 5</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>

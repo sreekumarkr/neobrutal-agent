@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Agents — AI Academy</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="top">
+      <a href="index.html" class="logo">AI/ACADEMY</a>
+      <ul>
+        <li><a href="index.html" class="link">Home</a></li>
+        <li><a href="fundamentals.html" class="link">Foundations</a></li>
+        <li><a href="llms.html" class="link">LLMs</a></li>
+        <li><a href="agents.html" class="link active">Agents</a></li>
+        <li><a href="frameworks.html" class="link">Frameworks</a></li>
+        <li><a href="glossary.html" class="link">Glossary</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero green">
+      <h1>AI <span class="pop">Agents</span></h1>
+      <p class="lede">An LLM is a brain in a jar. An agent is that brain with hands, eyes, memory, and a to-do list. This is where AI stops being a chatbot and starts being a coworker.</p>
+      <div class="doodle" style="top:20px;right:40px;">{ }</div>
+    </header>
+
+    <section class="reveal">
+      <h2 class="section-title">What is an Agent?</h2>
+      <div class="info-box">
+        <h3>The 1-line definition</h3>
+        <p style="font-size:18px;">An <strong>AI agent</strong> is a system where an LLM uses <strong>tools</strong> in a <strong>loop</strong> to accomplish a goal — making its own decisions about what to do next.</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card blue">
+          <div class="icon">⌬</div>
+          <h3>Brain</h3>
+          <p>An LLM. The reasoning engine. Decides what to do, when to stop, what the answer is.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">⚒</div>
+          <h3>Tools</h3>
+          <p>Functions the agent can call: search the web, run code, query a database, send an email, read a file.</p>
+        </div>
+        <div class="card yellow">
+          <div class="icon">↻</div>
+          <h3>Loop</h3>
+          <p>The agent keeps thinking and acting until it decides it's done. It doesn't have to know the steps in advance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">The ReAct Loop</h2>
+      <p class="section-sub">The most influential agent pattern. The model alternates between <strong>reasoning</strong> (think out loud) and <strong>acting</strong> (call a tool, see the result). Watch it cycle:</p>
+
+      <div class="agent-loop" id="loop">
+        <div class="loop-node">THINK</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-node">ACT</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-node">OBSERVE</div>
+        <div class="loop-arrow">↻</div>
+      </div>
+
+      <div class="info-box">
+        <h3>A walk-through</h3>
+        <p>Goal: <em>"What's the weather in Tokyo and should I pack an umbrella?"</em></p>
+        <ul>
+          <li><strong>Think:</strong> "I need current weather. I'll use the weather tool."</li>
+          <li><strong>Act:</strong> <code>get_weather("Tokyo")</code></li>
+          <li><strong>Observe:</strong> <code>{ temp: 14°C, rain: 80% }</code></li>
+          <li><strong>Think:</strong> "Heavy rain expected. I should recommend the umbrella."</li>
+          <li><strong>Act:</strong> Reply to user — "Yes, 80% chance of rain. Bring the umbrella."</li>
+          <li><strong>Stop.</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Tool Use — The Superpower</h2>
+      <p class="section-sub">Without tools, an LLM can only generate text. With tools, it can do almost anything. Modern LLMs are trained to output structured tool calls.</p>
+
+      <pre class="code"><span class="c"># A tool definition the model can see</span>
+{
+  <span class="s">"name"</span>: <span class="s">"search_web"</span>,
+  <span class="s">"description"</span>: <span class="s">"Search the web and return top results"</span>,
+  <span class="s">"parameters"</span>: {
+    <span class="s">"query"</span>: { <span class="s">"type"</span>: <span class="s">"string"</span> }
+  }
+}
+
+<span class="c"># What the model outputs when it decides to use it</span>
+{
+  <span class="s">"tool"</span>: <span class="s">"search_web"</span>,
+  <span class="s">"args"</span>: { <span class="s">"query"</span>: <span class="s">"latest mars rover findings 2026"</span> }
+}</pre>
+
+      <div class="grid cols-3" style="margin-top:24px;">
+        <div class="card blue"><div class="icon">⌕</div><h3>Search</h3><p>Web search, vector DB lookups, knowledge base queries.</p></div>
+        <div class="card green"><div class="icon">▶</div><h3>Code</h3><p>Run Python in a sandbox. Calculate, plot, parse files.</p></div>
+        <div class="card pink"><div class="icon">✉</div><h3>Communicate</h3><p>Send email, post to Slack, file a ticket, message a teammate.</p></div>
+        <div class="card yellow"><div class="icon">▤</div><h3>Files</h3><p>Read, write, edit. The bread and butter of coding agents.</p></div>
+        <div class="card orange"><div class="icon">⌬</div><h3>APIs</h3><p>Call any third-party service: GitHub, Stripe, Linear, Notion.</p></div>
+        <div class="card purple"><div class="icon">⊕</div><h3>Custom</h3><p>You can wrap any function as a tool. The agent figures out when to use it.</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Memory</h2>
+      <p class="section-sub">An LLM by itself has no memory between calls — every conversation starts fresh. Agents fix this with explicit memory systems.</p>
+      <div class="grid cols-3">
+        <div class="card pink">
+          <div class="icon">⏱</div>
+          <h3>Short-term</h3>
+          <p>The current conversation, kept in the context window. Lost when the conversation ends.</p>
+        </div>
+        <div class="card blue">
+          <div class="icon">⌬</div>
+          <h3>Long-term</h3>
+          <p>Facts written to a file or database. The agent can read them back next time. "User prefers TypeScript over Python."</p>
+        </div>
+        <div class="card green">
+          <div class="icon">∿</div>
+          <h3>Semantic</h3>
+          <p>A vector database of past notes. The agent searches by meaning, not keywords. Powers RAG and recall.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Multi-Agent Systems</h2>
+      <p class="section-sub">Why have one agent when you can have a team? Multiple specialized agents that talk to each other to solve bigger problems.</p>
+      <div class="grid cols-2">
+        <div class="info-box">
+          <h3>The pattern</h3>
+          <ul>
+            <li>A <strong>planner</strong> agent breaks the goal into subtasks.</li>
+            <li>Specialist agents (researcher, coder, writer, reviewer) each handle one subtask.</li>
+            <li>An <strong>orchestrator</strong> routes work and merges results.</li>
+            <li>A <strong>critic</strong> checks the output before it ships.</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h3>When it helps</h3>
+          <p>When a task is too big or too varied for one agent's context window, or when different parts of the task need very different prompts, tools, or models.</p>
+          <p>Frameworks like <strong>CrewAI</strong> and <strong>AutoGen</strong> exist mostly to make this easier.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Real-World Agent Examples</h2>
+      <div class="grid cols-2">
+        <div class="card yellow">
+          <div class="icon">⌨</div>
+          <h3>Coding Agents</h3>
+          <p>Claude Code, Cursor, Devin, Aider. Read your repo, write features, run tests, fix the failures, open a PR.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">⌕</div>
+          <h3>Research Agents</h3>
+          <p>Take a question, browse dozens of sources, synthesize an answer with citations. Perplexity, Claude's research mode, OpenAI Deep Research.</p>
+        </div>
+        <div class="card blue">
+          <div class="icon">⌧</div>
+          <h3>Computer-Use Agents</h3>
+          <p>Agents that actually click, type, and scroll on a real screen. Anthropic's Computer Use, OpenAI's Operator. Spookier and more general.</p>
+        </div>
+        <div class="card green">
+          <div class="icon">⚡</div>
+          <h3>Customer Support</h3>
+          <p>Agents that read the ticket, search the knowledge base, look up the customer's order, and either answer or escalate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Agent Pitfalls</h2>
+      <div class="grid cols-3">
+        <div class="card orange">
+          <div class="icon">⚠</div>
+          <h3>Loops Forever</h3>
+          <p>Without limits, agents can spin on a task they can't solve. Always set max iterations.</p>
+        </div>
+        <div class="card pink">
+          <div class="icon">⚠</div>
+          <h3>Tool Confusion</h3>
+          <p>Too many tools and the model picks the wrong one. Curate ruthlessly.</p>
+        </div>
+        <div class="card purple">
+          <div class="icon">⚠</div>
+          <h3>Cost Explosion</h3>
+          <p>Every step is a new LLM call. A complex agent task can rack up serious bills.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title alt">Up Next</h2>
+      <a href="frameworks.html" class="card orange" style="text-decoration:none;display:block;">
+        <div class="icon">→</div>
+        <h3>Frameworks</h3>
+        <p>Now you know what an agent is. Time to look at the libraries that help you build them — and the trade-offs between them.</p>
+      </a>
+    </section>
+
+    <footer class="bottom">
+      <p>BUILT LOUD. © 2026 AI ACADEMY</p>
+      <span class="made">Agents · 3 of 5</span>
+    </footer>
+
+  </div>
+  <button id="to-top" class="to-top" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>
